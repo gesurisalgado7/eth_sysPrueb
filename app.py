@@ -147,7 +147,36 @@ try:
             st.download_button("⬇️ Descargar Diagrama de Flujo (PDF)", data=data_pfd, file_name="PFD_ISO.pdf", mime="application/pdf")
         else:
             st.warning("⚠️ Sube 'PFD_ISO.pdf' a GitHub")
+# ==========================================
+    # 5. ANÁLISIS DE SENSIBILIDAD (PUNTO 6.2)
+    # ==========================================
+    st.divider()
+    st.subheader("📈 Análisis de Sensibilidad Económica")
+    
+    # Creamos datos para la gráfica: Precio Vapor vs Costo Producción
+    precios_vapor = [10, 20, 30, 40, 50, 60]
+    costos_calculados = [p_mos * 1.1 + (pv * 0.005) for pv in precios_vapor]
+    
+    df_sens = pd.DataFrame({
+        "Precio Vapor (USD/ton)": precios_vapor,
+        "Costo Prod (USD/kg)": costos_calculados
+    })
+    
+    st.line_chart(df_sens.set_index("Precio Vapor (USD/ton)"))
+    st.caption("Gráfica 1: Impacto del costo energético en el costo unitario de producción.")
 
+    # ==========================================
+    # 6. COMPARACIÓN DE ESCENARIOS (PUNTO 6.3)
+    # ==========================================
+    st.subheader("🏢 Comparación de Escenarios")
+    col_esc1, col_esc2, col_esc3 = st.columns(3)
+    
+    with col_esc1:
+        st.info("**Caso Base**\n\nOperación estándar a 1 atm y precios de mercado actuales.")
+    with col_esc2:
+        st.success("**Caso Rentable**\n\nOptimización de temperatura (92°C) para maximizar ROI.")
+    with col_esc3:
+        st.warning("**Caso Crítico**\n\nInsumos caros (Vapor > 40 USD). Riesgo de pérdida económica.")
     # --- MODO TUTOR IA (PUNTOS 13, 14, 15) ---
     st.divider()
     st.subheader("🤖 Tutor de Inteligencia Artificial")
