@@ -202,67 +202,7 @@ try:
         st.warning("⚠️ Archivo 'pfd_proceso.png' no encontrado en el repositorio.")
     st.markdown('</div>', unsafe_allow_html=True)
     # ==========================================
-    # 8. PANEL DE MONITOREO INTERACTIVO EN TIEMPO REAL
-    # ==========================================
-    st.divider()
-    st.subheader("🕹️ Panel de Monitoreo de Equipos (HMI)")
-    st.caption("Pasa el cursor sobre cada equipo para iluminar su pantalla de control y revisar sus variables críticas en vivo.")
-
-    # Fila 1: Equipos de Preparación (Gama Lila/Azul)
-    col_e1, col_e2, col_e3 = st.columns(3)
-    
-    with col_e1:
-        st.markdown(f"""
-            <div class="tarjeta-industrial tarjeta-lila">
-                <h4 class="titulo-tarjeta" style="color: #bd00ff;">Bomba P-110</h4>
-                <p style="margin:0; font-size:14px;"><b>Estado:</b> Operando</p>
-                <p style="margin:0; font-size:14px;"><b>Presión Salida:</b> 4.0 atm</p>
-                <p style="margin:0; font-size:14px;"><b>Flujo Másico:</b> 1000 kg/h</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-    with col_e2:
-        st.markdown(f"""
-            <div class="tarjeta-industrial tarjeta-lila">
-                <h4 class="titulo-tarjeta" style="color: #bd00ff;">Precalentador W-210</h4>
-                <p style="margin:0; font-size:14px;"><b>Eficiencia:</b> 90% (Recuperación)</p>
-                <p style="margin:0; font-size:14px;"><b>T. Entrada Mosto:</b> {t_f} °C</p>
-                <p style="margin:0; font-size:14px;"><b>T. Salida Mosto:</b> 85.0 °C</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-    with col_e3:
-        st.markdown(f"""
-            <div class="tarjeta-industrial tarjeta-lila">
-                <h4 class="titulo-tarjeta" style="color: #bd00ff;">Calentador W-310</h4>
-                <p style="margin:0; font-size:14px;"><b>Servicio:</b> Vapor Saturado</p>
-                <p style="margin:0; font-size:14px;"><b>T. Salida Requerida:</b> {t_out} °C</p>
-                <p style="margin:0; font-size:14px;"><b>Carga Térmica:</b> 14.34 kW</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-    # Fila 2: Equipos de Separación (Gama Verde/Amarillo)
-    col_e4, col_e5 = st.columns(2)
-    
-    with col_e4:
-        st.markdown(f"""
-            <div class="tarjeta-industrial tarjeta-verde">
-                <h4 class="titulo-tarjeta" style="color: #39ff14;">Separador Flash K-410</h4>
-                <p style="margin:0; font-size:14px;"><b>Presión de Operación:</b> {p_v:.2f} atm</p>
-                <p style="margin:0; font-size:14px;"><b>Temperatura Flash:</b> 92.2 °C</p>
-                <p style="margin:0; font-size:14px;"><b>Flujo Destilado (Vapor):</b> {producto.F_mass:.2f} kg/h</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-    with col_e5:
-        st.markdown(f"""
-            <div class="tarjeta-industrial tarjeta-verde">
-                <h4 class="titulo-tarjeta" style="color: #39ff14;">Condensador W-510</h4>
-                <p style="margin:0; font-size:14px;"><b>Servicio:</b> Agua Enfriamiento</p>
-                <p style="margin:0; font-size:14px;"><b>Concentración Etanol:</b> {eth_comp:.1f} %</p>
-                <p style="margin:0; font-size:14px;"><b>Flujo Líquido Final:</b> {producto.F_mass:.2f} kg/h</p>
-            </div>
-            """, unsafe_allow_html=True)
+   
 
     # ==========================================
     # 8. PANEL DE MONITOREO INTERACTIVO EN TIEMPO REAL
