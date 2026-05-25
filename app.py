@@ -124,79 +124,83 @@ try:
 
     # --- DESCARGAS ISO (PUNTOS 11 Y 12) ---
 # ==========================================
-  # ==========================================
+# ==========================================
     # 7. DOCUMENTACIÓN TÉCNICA Y DIAGRAMAS (PUNTOS 11 Y 12)
     # ==========================================
     st.divider()
     
-    # CSS para el efecto Hover en los diagramas y en las tarjetas industriales
+    # CSS Avanzado: Efecto interactivo "Hover" para iluminar los diagramas al pasar el cursor
     st.markdown("""
         <style>
-        /* Estilo base para las imágenes */
-        .bloque-diagrama-estatico img {
+        /* Contenedor general transparente para evitar bloques toscos */
+        .bloque-diagrama-interactivo {
+            padding: 10px;
+            margin-bottom: 45px;
+            width: 100%;
+            background-color: transparent;
+        }
+
+        /* --- EFECTO INTERACTIVO HOVER --- */
+        /* Configuración base de las imágenes: transición suave */
+        .bloque-diagrama-interactivo img {
+            transition: all 0.4s ease-in-out !important;
             border-radius: 12px;
-            margin-bottom: 30px;
-            transition: transform 0.3s ease;
         }
-        .bloque-diagrama-estatico img:hover {
-            transform: scale(1.01);
-        }
-        
-        /* --- ESTILOS DE LAS TARJETAS NEÓN --- */
-        .tarjeta-industrial {
-            background-color: #0e1117 !important;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease-in-out;
-            border: 1px solid #262730;
-        }
-        
-        /* Hover Lila/Azul para equipos de bombeo e intercambiadores iniciales */
-        .tarjeta-lila:hover {
-            border: 2px solid #bd00ff !important;
-            box-shadow: 0 0 15px #00d4ff !important;
-            transform: translateY(-5px);
+
+        /* 1. Comportamiento al pasar el cursor en el BFD (Lila/Azul) */
+        .bloque-diagrama-interactivo.lila-azul img:hover {
+            filter: brightness(1.2) drop-shadow(0 0 25px #00d4ff) !important;
             cursor: pointer;
         }
-        
-        /* Hover Verde/Amarillo para el área de separación y condensación */
-        .tarjeta-verde:hover {
-            border: 2px solid #39ff14 !important;
-            box-shadow: 0 0 15px #fff000 !important;
-            transform: translateY(-5px);
-            cursor: pointer;
-        }
-        
-        /* Títulos internos de las tarjetas */
-        .titulo-tarjeta {
+        .text-lila-neon {
+            color: #bd00ff !important;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            margin-bottom: 8px;
+        }
+
+        /* 2. Comportamiento al pasar el cursor en el PFD (Verde/Amarillo) */
+        .bloque-diagrama-interactivo.verde-amarillo img:hover {
+            filter: brightness(1.2) drop-shadow(0 0 25px #39ff14) !important;
+            cursor: pointer;
+        }
+        .text-verde-neon {
+            color: #39ff14 !important;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
         }
         </style>
         """, unsafe_allow_html=True)
 
     st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
 
-    # --- DESPLIEGUE DE DIAGRAMAS A PANTALLA COMPLETA ---
-    if os.path.exists("bfd_bloques.png"):
-        st.image("bfd_bloques.png", use_container_width=True, caption="📊 Diagrama de Bloques (BFD)")
+    # --- 1. DIAGRAMA DE BLOQUES (BFD) ---
+    st.markdown('<div class="bloque-diagrama-interactivo lila-azul">', unsafe_allow_html=True)
+    st.markdown('<h3 class="text-lila-neon">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
     
-    if os.path.exists("pfd_proceso.png"):
-        st.image("pfd_proceso.png", use_container_width=True, caption="⚙️ Diagrama de Flujo de Proceso (PFD) - Diseñado en Lucidchart")
-
-    # Botones de descarga alineados
-    c_down1, c_down2 = st.columns(2)
-    with c_down1:
+    if os.path.exists("bfd_bloques.png"):
+        st.image("bfd_bloques.png", use_container_width=True, caption="Estructura general del proceso de concentración")
+        
         if os.path.exists("Bloques_ISO.pdf"):
             with open("Bloques_ISO.pdf", "rb") as f:
                 st.download_button("⬇️ Descargar BFD en PDF", data=f.read(), file_name="Bloques_ISO.pdf", mime="application/pdf")
-    with c_down2:
+    else:
+        st.warning("⚠️ Archivo 'bfd_bloques.png' no encontrado en el repositorio.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD) ---
+    st.markdown('<div class="bloque-diagrama-interactivo verde-amarillo">', unsafe_allow_html=True)
+    st.markdown('<h3 class="text-verde-neon">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
+    
+    if os.path.exists("pfd_proceso.png"):
+        st.image("pfd_proceso.png", use_container_width=True, caption="Diseño detallado de ingeniería realizado en Lucidchart")
+        
         if os.path.exists("PFD_ISO.pdf"):
             with open("PFD_ISO.pdf", "rb") as f:
                 st.download_button("⬇️ Descargar PFD en PDF", data=f.read(), file_name="PFD_ISO.pdf", mime="application/pdf")
-
+    else:
+        st.warning("⚠️ Archivo 'pfd_proceso.png' no encontrado en el repositorio.")
+    st.markdown('</div>', unsafe_allow_html=True)
     # ==========================================
     # 8. PANEL DE MONITOREO INTERACTIVO EN TIEMPO REAL
     # ==========================================
