@@ -124,83 +124,86 @@ try:
 
     # --- DESCARGAS ISO (PUNTOS 11 Y 12) ---
 # ==========================================
+# ==========================================
     # 7. DOCUMENTACIÓN TÉCNICA Y DIAGRAMAS (PUNTOS 11 Y 12)
     # ==========================================
     st.divider()
     
-    # Inyección de CSS personalizado para los marcos fluorescentes
+    # Inyección de CSS avanzado para estirar contenedores y aplicar filtros fluorescentes a las imágenes
     st.markdown("""
         <style>
-        /* Contenedor 1: Lila y Azul Fluorescente */
-        .maro-lila-azul {
-            border: 3px solid #bd00ff;
-            box-shadow: 0 0 15px #00d4ff, inset 0 0 10px #bd00ff;
-            padding: 20px;
+        /* Estilos generales para bloques a pantalla completa */
+        .bloque-neon-completo {
+            padding: 25px;
             border-radius: 15px;
             background-color: #0e1117;
-            margin-bottom: 25px;
+            margin-bottom: 40px;
+            width: 100%;
         }
-        .titulo-lila {
+        
+        /* Contenedor 1: Lila y Azul Fluorescente */
+        .neon-lila-azul {
+            border: 3px solid #bd00ff;
+            box-shadow: 0 0 20px #00d4ff;
+        }
+        .neon-lila-azul img {
+            filter: drop-shadow(0 0 10px #00d4ff) hue-rotate(50deg) saturate(1.5);
+        }
+        .text-lila {
             color: #bd00ff !important;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            text-shadow: 0 0 8px #00d4ff;
+            text-shadow: 0 0 10px #00d4ff;
         }
         
         /* Contenedor 2: Verde y Amarillo Fluorescente */
-        .marco-verde-amarillo {
+        .neon-verde-amarillo {
             border: 3px solid #39ff14;
-            box-shadow: 0 0 15px #fff000, inset 0 0 10px #39ff14;
-            padding: 20px;
-            border-radius: 15px;
-            background-color: #0e1117;
-            margin-bottom: 25px;
+            box-shadow: 0 0 20px #fff000;
         }
-        .titulo-verde {
+        .neon-verde-amarillo img {
+            filter: drop-shadow(0 0 10px #fff000) hue-rotate(280deg) saturate(2);
+        }
+        .text-verde {
             color: #39ff14 !important;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            text-shadow: 0 0 8px #fff000;
+            text-shadow: 0 0 10px #fff000;
         }
         </style>
         """, unsafe_allow_html=True)
 
     st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
-    col_diag1, col_diag2 = st.columns(2)
 
-    # --- COLUMNA 1: DIAGRAMA DE BLOQUES (Lila y Azul) ---
-    with col_diag1:
-        st.markdown('<div class="maro-lila-azul">', unsafe_allow_html=True)
-        st.markdown('<h3 class="titulo-lila">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
+    # --- 1. DIAGRAMA DE BLOQUES (BFD) - PANTALLA COMPLETA (Lila y Azul) ---
+    st.markdown('<div class="bloque-neon-completo neon-lila-azul">', unsafe_allow_html=True)
+    st.markdown('<h3 class="text-lila">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
+    
+    if os.path.exists("bfd_bloques.png"):
+        st.image("bfd_bloques.png", use_container_width=True, caption="Estructura general del proceso de concentración")
         
-        # Mostrar la imagen en la app
-        if os.path.exists("bfd_bloques.png"):
-            st.image("bfd_bloques.png", use_container_width=True, caption="Estructura general del proceso de concentración")
-            
-            # Botón de descarga en formato PDF si existe el archivo original
-            if os.path.exists("Bloques_ISO.pdf"):
-                with open("Bloques_ISO.pdf", "rb") as f:
-                    st.download_button("⬇️ Descargar BFD en PDF", data=f.read(), file_name="Bloques_ISO.pdf", mime="application/pdf")
-        else:
-            st.warning("⚠️ Archivo 'bfd_bloques.png' no encontrado en el repositorio.")
-        st.markdown('</div>', unsafe_allow_html=True)
+        if os.path.exists("Bloques_ISO.pdf"):
+            with open("Bloques_ISO.pdf", "rb") as f:
+                st.download_button("⬇️ Descargar BFD en PDF", data=f.read(), file_name="Bloques_ISO.pdf", mime="application/pdf")
+    else:
+        st.warning("⚠️ Archivo 'bfd_bloques.png' no encontrado en el repositorio.")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- COLUMNA 2: DIAGRAMA DE FLUJO DE PROCESO (Verde y Amarillo) ---
-    with col_diag2:
-        st.markdown('<div class="marco-verde-amarillo">', unsafe_allow_html=True)
-        st.markdown('<h3 class="titulo-verde">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
+
+    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD) - PANTALLA COMPLETA (Verde y Amarillo) ---
+    st.markdown('<div class="bloque-neon-completo neon-verde-amarillo">', unsafe_allow_html=True)
+    st.markdown('<h3 class="text-verde">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
+    
+    if os.path.exists("pfd_proceso.png"):
+        st.image("pfd_proceso.png", use_container_width=True, caption="Diseño detallado de ingeniería realizado en Lucidchart")
         
-        # Mostrar la imagen en la app
-        if os.path.exists("pfd_proceso.png"):
-            st.image("pfd_proceso.png", use_container_width=True, caption="Diseño detallado de ingeniería realizado en Lucidchart")
-            
-            # Botón de descarga en formato PDF si existe el archivo original
-            if os.path.exists("PFD_ISO.pdf"):
-                with open("PFD_ISO.pdf", "rb") as f:
-                    st.download_button("⬇️ Descargar PFD en PDF", data=f.read(), file_name="PFD_ISO.pdf", mime="application/pdf")
-        else:
-            st.warning("⚠️ Archivo 'pfd_proceso.png' no encontrado en el repositorio.")
-        st.markdown('</div>', unsafe_allow_html=True)
+        if os.path.exists("PFD_ISO.pdf"):
+            with open("PFD_ISO.pdf", "rb") as f:
+                st.download_button("⬇️ Descargar PFD en PDF", data=f.read(), file_name="PFD_ISO.pdf", mime="application/pdf")
+    else:
+        st.warning("⚠️ Archivo 'pfd_proceso.png' no encontrado en el repositorio.")
+    st.markdown('</div>', unsafe_allow_html=True)
+    
         
 # ==========================================
     # 5. ANÁLISIS DE SENSIBILIDAD (PUNTO 6.2)
