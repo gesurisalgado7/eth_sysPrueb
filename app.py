@@ -318,36 +318,39 @@ except Exception as e:
     st.error(f"Error en la simulación: {e}")
 
 # ==========================================
-    # 7. DOCUMENTACIÓN TÉCNICA Y DIAGRAMAS (SVG INTERACTIVOS)
+# ==========================================
+    # 7. DOCUMENTACIÓN TÉCNICA Y DIAGRAMAS (MÉTODO SEGURO SVG)
     # ==========================================
     st.divider()
     
-    # CSS para interactuar directamente con las líneas del dibujo SVG
+    # CSS para forzar la interactividad neón directamente sobre los elementos del dibujo
     st.markdown("""
         <style>
-        /* Contenedor limpio sin fondos */
-        .contenedor-svg-interactivo {
+        .contenedor-svg-seguro {
             width: 100%;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
             background: transparent;
+            display: block;
         }
-
-        /* --- INTERACCIÓN LILA/AZUL (BFD) --- */
-        /* Al pasar el cursor sobre el SVG, alteramos los vectores internos */
-        .vector-lila img {
+        /* Efecto Hover para el BFD (Lila/Azul) */
+        .dinamico-lila svg {
+            width: 100%;
+            height: auto;
             transition: filter 0.3s ease-in-out;
         }
-        .vector-lila img:hover {
-            filter: brightness(1.4) drop-shadow(0 0 12px #bd00ff);
+        .dinamico-lila svg:hover {
+            filter: brightness(1.3) drop-shadow(0 0 20px #bd00ff);
             cursor: pointer;
         }
 
-        /* --- INTERACCIÓN VERDE/AMARILLO (PFD) --- */
-        .vector-verde img {
+        /* Efecto Hover para el PFD (Verde/Amarillo) */
+        .dinamico-verde svg {
+            width: 100%;
+            height: auto;
             transition: filter 0.3s ease-in-out;
         }
-        .vector-verde img:hover {
-            filter: brightness(1.4) drop-shadow(0 0 12px #39ff14);
+        .dinamico-verde svg:hover {
+            filter: brightness(1.3) drop-shadow(0 0 20px #39ff14);
             cursor: pointer;
         }
         </style>
@@ -355,23 +358,26 @@ except Exception as e:
 
     st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
 
-    # --- 1. DIAGRAMA DE BLOQUES (BFD en SVG) ---
-    st.markdown('<div class="contenedor-svg-interactivo vector-lila">', unsafe_allow_html=True)
-    st.markdown('<h3 style="color: #d680ff; font-family: monospace;">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
-    
+    # --- 1. DIAGRAMA DE BLOQUES (BFD) ---
     if os.path.exists("bfd_bloques.svg"):
-        st.image("bfd_bloques.svg", use_container_width=True)
+        with open("bfd_bloques.svg", "r", encoding="utf-8") as f:
+            svg_bloques = f.read()
+        
+        st.markdown(f'<div class="contenedor-svg-seguro dinamico-lila">', unsafe_allow_html=True)
+        st.markdown('<h3 style="color: #d680ff; font-family: monospace; margin-bottom:15px;">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
+        st.markdown(svg_bloques, unsafe_allow_html=True) # Inyección directa del SVG
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
-        st.warning("⚠️ Sube el archivo 'bfd_bloques.svg' para activar la interactividad vectorizada.")
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.warning("⚠️ No se encontró el archivo 'bfd_bloques.svg' en la carpeta de la app.")
 
-
-    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD en SVG) ---
-    st.markdown('<div class="contenedor-svg-interactivo vector-verde">', unsafe_allow_html=True)
-    st.markdown('<h3 style="color: #39ff14; font-family: monospace;">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
-    
+    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD) ---
     if os.path.exists("pfd_proceso.svg"):
-        st.image("pfd_proceso.svg", use_container_width=True)
+        with open("pfd_proceso.svg", "r", encoding="utf-8") as f:
+            svg_proceso = f.read()
+            
+        st.markdown(f'<div class="contenedor-svg-seguro dinamico-verde">', unsafe_allow_html=True)
+        st.markdown('<h3 style="color: #39ff14; font-family: monospace; margin-bottom:15px;">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
+        st.markdown(svg_proceso, unsafe_allow_html=True) # Inyección directa del SVG
+        st.markdown('</div>', unsafe_allow_html=True)
     else:
-        st.warning("⚠️ Sube el archivo 'pfd_proceso.svg' para activar la interactividad vectorizada.")
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.warning("⚠️ No se encontró el archivo 'pfd_proceso.svg' en la carpeta de la app.")
