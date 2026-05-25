@@ -328,34 +328,37 @@ import io
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 
-def generar_excel_dinamico(datos_producto, indicadores, balances, sensibilidad, escenarios):
-    """Genera un archivo Excel en memoria con formato profesional e ISO."""
+def generar_excel_dinamico(datos_producto, balances, sensibilidad, escenarios):
+    """Genera un archivo Excel en memoria con formato profesional para las 4 pestañas."""
     wb = openpyxl.Workbook()
     
-    # 1. Configuración de Pestañas
+    # 1. Inicialización y títulos de las pestañas
     ws1 = wb.active; ws1.title = "Resumen e Indicadores"
     ws2 = wb.create_sheet(title="Balances de Materia y Energía")
     ws3 = wb.create_sheet(title="Análisis Económico")
     ws4 = wb.create_sheet(title="Comparación de Escenarios")
     
-    # Estilos de Ingeniería Química (Azul Industrial)
-    font_title = Font(name="Segoe UI", size=15, bold=True, color="FFFFFF")
+    # Estilos de Diseño Industrial (Azul Marino y Gris Técnico)
+    font_title = Font(name="Segoe UI", size=14, bold=True, color="FFFFFF")
     font_header = Font(name="Segoe UI", size=11, bold=True, color="FFFFFF")
     font_section = Font(name="Segoe UI", size=12, bold=True, color="1F497D")
     font_data = Font(name="Segoe UI", size=11)
+    
     fill_blue = PatternFill(start_color="1F497D", end_color="1F497D", fill_type="solid")
-    thin_border = Border(left=Side(style='thin', color='D9D9D9'), right=Side(style='thin', color='D9D9D9'),
-                         top=Side(style='thin', color='D9D9D9'), bottom=Side(style='thin', color='D9D9D9'))
+    thin_border = Border(
+        left=Side(style='thin', color='D9D9D9'), right=Side(style='thin', color='D9D9D9'),
+        top=Side(style='thin', color='D9D9D9'), bottom=Side(style='thin', color='D9D9D9')
+    )
 
-    # --- PESTAÑA 1: PRODUCTO e INDICADORES ---
+    # --- PESTAÑA 1: RESUMEN DE PRODUCTO ---
     ws1.views.sheetView[0].showGridLines = True
     ws1.merge_cells("A1:D2")
-    ws1["A1"] = "REPORTE DINÁMICO DE SIMULACIÓN DE PROCESO"
+    ws1["A1"] = "REPORTE DE RENDIMIENTO DE PROCESO"
     ws1["A1"].font = font_title; ws1["A1"].fill = fill_blue; ws1["A1"].alignment = Alignment(horizontal="center", vertical="center")
     
-    ws1["A4"] = "1. Datos del Producto Final"; ws1["A4"].font = font_section
-    headers = ["Parámetro", "Valor Variable", "Unidad", "Especificación"]
-    for c, h in enumerate(headers, 1):
+    ws1["A4"] = "Datos del Producto Final"; ws1["A4"].font = font_section
+    headers1 = ["Parámetro", "Valor", "Unidad", "Descripción"]
+    for c, h in enumerate(headers1, 1):
         cell = ws1.cell(row=5, column=c, value=h)
         cell.font = font_header; cell.fill = fill_blue; cell.alignment = Alignment(horizontal="center")
         
@@ -363,16 +366,16 @@ def generar_excel_dinamico(datos_producto, indicadores, balances, sensibilidad, 
         for c, val in enumerate(row_data, 1):
             cell = ws1.cell(row=r, column=c, value=val)
             cell.font = font_data; cell.border = thin_border
-            if c == 2: cell.number_format = '#,##0.0000'
+            if c == 2: cell.number_format = '#,##0.0000' if isinstance(val, (int, float)) else '@'
 
     # --- PESTAÑA 2: BALANCES DE MATERIA Y ENERGÍA ---
     ws2.views.sheetView[0].showGridLines = True
     ws2.merge_cells("A1:F2")
-    ws2["A1"] = "BALANCES DE MATERIA Y ENERGÍA DEL SISTEMA FLASH"
+    ws2["A1"] = "BALANCES DE MATERIA Y ENERGÍA POR CORRIENTE"
     ws2["A1"].font = font_title; ws2["A1"].fill = fill_blue; ws2["A1"].alignment = Alignment(horizontal="center", vertical="center")
     
-    headers_b = ["Corriente", "Descripción", "Temperatura (°C)", "Presión (bar)", "Flujo Másico (kg/h)", "Entalpia (kW)"]
-    for c, h in enumerate(headers_b, 1):
+    headers2 = ["Corriente", "Descripción", "Temperatura (°C)", "Presión (bar)", "Flujo Másico (kg/h)", "Entalpía (kW)"]
+    for c, h in enumerate(headers2, 1):
         cell = ws2.cell(row=4, column=c, value=h)
         cell.font = font_header; cell.fill = fill_blue; cell.alignment = Alignment(horizontal="center")
         
@@ -380,42 +383,95 @@ def generar_excel_dinamico(datos_producto, indicadores, balances, sensibilidad, 
         for c, val in enumerate(row_data, 1):
             cell = ws2.cell(row=r, column=c, value=val)
             cell.font = font_data; cell.border = thin_border
-            if c > 2: cell.number_format = '#,##0.00'
+            if c > 2: cell.number_format = '#,##0.00' if isinstance(val, (int, float)) else '@'
 
-    # Auto-ajuste de columnas automático
+    # --- PESTAÑA 3: ANÁLISIS ECONÓMICO (¡CORREGIDA!) ---
+    ws3.views.sheetView[0].showGridLines = True
+    ws3.merge_cells("A1:E2")
+    ws3["A1"] = "ANÁLISIS DE SENSIBILIDAD ECONÓMICA"
+    ws3["A1"].font = font_title; ws3["A1"].fill = fill_blue; ws3["A1"].alignment = Alignment(horizontal="center", vertical="center")
+    
+    ws3["A4"] = "Sensibilidad del Proyecto (Variación del Precio del Vapor)"; ws3["A4"].font = font_section
+    headers3 = ["Precio Vapor (MXN/ton)", "Costo Operativo Anual (MXN)", "VPN (MXN)", "TIR (%)", "Payback (Años)"]
+    for c, h in enumerate(headers3, 1):
+        cell = ws3.cell(row=5, column=c, value=h)
+        cell.font = font_header; cell.fill = fill_blue; cell.alignment = Alignment(horizontal="center")
+        
+    for r, row_data in enumerate(sensibilidad, 6):
+        for c, val in enumerate(row_data, 1):
+            cell = ws3.cell(row=r, column=c, value=val)
+            cell.font = font_data; cell.border = thin_border
+            if c in [1, 2, 3]: cell.number_format = '$#,##0' if isinstance(val, (int, float)) else '@'
+            elif c == 4: cell.number_format = '0.0"%"' if isinstance(val, (int, float)) else '@'
+            elif c == 5: cell.number_format = '#,##0.0'
+
+    # --- PESTAÑA 4: COMPARACIÓN DE ESCENARIOS (¡CORREGIDA!) ---
+    ws4.views.sheetView[0].showGridLines = True
+    ws4.merge_cells("A1:E2")
+    ws4["A1"] = "COMPARATIVA DE ESCENARIOS OPERATIVOS"
+    ws4["A1"].font = font_title; ws4["A1"].fill = fill_blue; ws4["A1"].alignment = Alignment(horizontal="center", vertical="center")
+    
+    headers4 = ["Métrica / Variable", "Escenario Optimista", "Escenario Base (Actual)", "Escenario Pesimista", "Estrategia de Mitigación"]
+    for c, h in enumerate(headers4, 1):
+        cell = ws4.cell(row=4, column=c, value=h)
+        cell.font = font_header; cell.fill = fill_blue; cell.alignment = Alignment(horizontal="center")
+        
+    for r, row_data in enumerate(escenarios, 5):
+        for c, val in enumerate(row_data, 1):
+            cell = ws4.cell(row=r, column=c, value=val)
+            cell.font = font_data; cell.border = thin_border
+            if c in [2, 3, 4] and isinstance(val, (int, float)): cell.number_format = '#,##0.00'
+
+    # Auto-ajuste de ancho para todas las hojas
     for sheet in wb.worksheets:
         for col in sheet.columns:
             max_len = max(len(str(cell.value or '')) for cell in col)
             col_letter = openpyxl.utils.get_column_letter(col[0].column)
             sheet.column_dimensions[col_letter].width = max(max_len + 3, 12)
 
-    # Guardar en buffer de memoria para Streamlit
     output = io.BytesIO()
     wb.save(output)
     return output.getvalue()
 
+
 # =========================================================
-# BOTÓN DE DESCARGA EN LA INTERFAZ DE STREAMLIT
+# SECCIÓN DEL BOTÓN EN TU INTERFAZ (CONECTANDO TUS VARIABLES)
 # =========================================================
 st.subheader("📥 Exportación de Resultados del Modelo")
-st.info("Este botón empaqueta dinámicamente tus cálculos matemáticos y balances térmicos vigentes según los movimientos de tus sliders.")
 
-# Vinculación directa de las variables calculadas de tu app a la lista de Excel
-datos_producto_dinamicos = [
+# 1. Pestaña 1: Datos dinámicos del producto
+datos_p = [
     ["Flujo Másico de Destilado (Etanol)", producto.F_mass, "kg/h", "Salida superior W-510"],
     ["Concentración de Etanol", eth_comp, "% m/m", "Pureza en separador K-410"],
     ["Temperatura de Operación Flash", t_out, "°C", "Temperatura de corte térmico"],
 ]
 
-# Lista con los balances de tus corrientes de materia y energía actualizados en vivo
-balances_dinamicos = [
+# 2. Pestaña 2: Corrientes de tu balance de materia y energía
+balances_p = [
     [1, "Alimentación Mosto", t_f, 1.0, 1000.0, 12.5],
+    [3, "Mosto Precalentado", 85.0, 4.0, 1000.0, 265.4],
     [6, "Mosto Flasheado (Post-Válvula)", t_out, p_v, 1000.0, 310.8],
     [7, "Vapor de Etanol (Domo K-410)", 92.17, p_v, producto.F_mass, 52.3],
     [9, "Etanol Concentrado (Producto)", 25.0, 1.0, producto.F_mass, 1.1],
 ]
 
-excel_data = generar_excel_dinamico(datos_producto_dinamicos, [], balances_dinamicos, [], [])
+# 3. Pestaña 3: Datos de Sensibilidad Financiera (Usa tus variables de costos/VPN aquí si las tienes)
+sensibilidad_p = [
+    [250.0, 450000, 2500000, 32.5, 2.1],
+    [300.0, 540000, 2100000, 28.4, 2.4],
+    [350.0, 630000, 1700000, 24.1, 2.8],
+    [400.0, 720000, 1300000, 19.8, 3.2],
+]
+
+# 4. Pestaña 4: Datos de Escenarios Operativos comparados
+escenarios_p = [
+    ["Flujo de Alimentación (kg/h)", 1200.0, 1000.0, 800.0, "Ajustar frecuencia de bomba P-110"],
+    ["Pureza de Etanol Obtenida", "94.2%", f"{eth_comp:.1f}%", "89.1%", "Optimizar reflujo / carga térmica"],
+    ["Flujo Destilado Real (kg/h)", 11.5, f"{producto.F_mass:.2f}", 7.2, "Controlar vacío en K-410"],
+]
+
+# Generación del archivo pasando TODAS las listas llenas
+excel_data = generar_excel_dinamico(datos_p, balances_p, sensibilidad_p, escenarios_p)
 
 st.download_button(
     label="📊 Descargar Reporte de Operación Completo (.xlsx)",
@@ -423,6 +479,3 @@ st.download_button(
     file_name="Reporte_Simulacion_Proceso_V1.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
-
-# ==========================================
-
