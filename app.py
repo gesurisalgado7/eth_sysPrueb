@@ -124,82 +124,141 @@ try:
 
     # --- DESCARGAS ISO (PUNTOS 11 Y 12) ---
 # ==========================================
+   # ==========================================
     # 7. DOCUMENTACIÓN TÉCNICA Y DIAGRAMAS (PUNTOS 11 Y 12)
     # ==========================================
     st.divider()
     
-    # CSS Avanzado: Efecto interactivo "Hover" para iluminar los diagramas al pasar el cursor
+    # CSS para el efecto Hover en los diagramas y en las tarjetas industriales
     st.markdown("""
         <style>
-        /* Contenedor general transparente para evitar bloques toscos */
-        .bloque-diagrama-interactivo {
-            padding: 10px;
-            margin-bottom: 45px;
-            width: 100%;
-            background-color: transparent;
-        }
-
-        /* --- EFECTO INTERACTIVO HOVER --- */
-        /* Configuración base de las imágenes: transición suave */
-        .bloque-diagrama-interactivo img {
-            transition: all 0.4s ease-in-out !important;
+        /* Estilo base para las imágenes */
+        .bloque-diagrama-estatico img {
             border-radius: 12px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
         }
-
-        /* 1. Comportamiento al pasar el cursor en el BFD (Lila/Azul) */
-        .bloque-diagrama-interactivo.lila-azul img:hover {
-            filter: brightness(1.2) drop-shadow(0 0 25px #00d4ff) !important;
+        .bloque-diagrama-estatico img:hover {
+            transform: scale(1.01);
+        }
+        
+        /* --- ESTILOS DE LAS TARJETAS NEÓN --- */
+        .tarjeta-industrial {
+            background-color: #0e1117 !important;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease-in-out;
+            border: 1px solid #262730;
+        }
+        
+        /* Hover Lila/Azul para equipos de bombeo e intercambiadores iniciales */
+        .tarjeta-lila:hover {
+            border: 2px solid #bd00ff !important;
+            box-shadow: 0 0 15px #00d4ff !important;
+            transform: translateY(-5px);
             cursor: pointer;
         }
-        .text-lila-neon {
-            color: #bd00ff !important;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-        }
-
-        /* 2. Comportamiento al pasar el cursor en el PFD (Verde/Amarillo) */
-        .bloque-diagrama-interactivo.verde-amarillo img:hover {
-            filter: brightness(1.2) drop-shadow(0 0 25px #39ff14) !important;
+        
+        /* Hover Verde/Amarillo para el área de separación y condensación */
+        .tarjeta-verde:hover {
+            border: 2px solid #39ff14 !important;
+            box-shadow: 0 0 15px #fff000 !important;
+            transform: translateY(-5px);
             cursor: pointer;
         }
-        .text-verde-neon {
-            color: #39ff14 !important;
+        
+        /* Títulos internos de las tarjetas */
+        .titulo-tarjeta {
             font-family: 'Courier New', monospace;
             font-weight: bold;
+            margin-bottom: 8px;
         }
         </style>
         """, unsafe_allow_html=True)
 
     st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
 
-    # --- 1. DIAGRAMA DE BLOQUES (BFD) ---
-    st.markdown('<div class="bloque-diagrama-interactivo lila-azul">', unsafe_allow_html=True)
-    st.markdown('<h3 class="text-lila-neon">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
-    
+    # --- DESPLIEGUE DE DIAGRAMAS A PANTALLA COMPLETA ---
     if os.path.exists("bfd_bloques.png"):
-        st.image("bfd_bloques.png", use_container_width=True, caption="Estructura general del proceso de concentración")
-        
+        st.image("bfd_bloques.png", use_container_width=True, caption="📊 Diagrama de Bloques (BFD)")
+    
+    if os.path.exists("pfd_proceso.png"):
+        st.image("pfd_proceso.png", use_container_width=True, caption="⚙️ Diagrama de Flujo de Proceso (PFD) - Diseñado en Lucidchart")
+
+    # Botones de descarga alineados
+    c_down1, c_down2 = st.columns(2)
+    with c_down1:
         if os.path.exists("Bloques_ISO.pdf"):
             with open("Bloques_ISO.pdf", "rb") as f:
                 st.download_button("⬇️ Descargar BFD en PDF", data=f.read(), file_name="Bloques_ISO.pdf", mime="application/pdf")
-    else:
-        st.warning("⚠️ Archivo 'bfd_bloques.png' no encontrado en el repositorio.")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-
-    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD) ---
-    st.markdown('<div class="bloque-diagrama-interactivo verde-amarillo">', unsafe_allow_html=True)
-    st.markdown('<h3 class="text-verde-neon">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
-    
-    if os.path.exists("pfd_proceso.png"):
-        st.image("pfd_proceso.png", use_container_width=True, caption="Diseño detallado de ingeniería realizado en Lucidchart")
-        
+    with c_down2:
         if os.path.exists("PFD_ISO.pdf"):
             with open("PFD_ISO.pdf", "rb") as f:
                 st.download_button("⬇️ Descargar PFD en PDF", data=f.read(), file_name="PFD_ISO.pdf", mime="application/pdf")
-    else:
-        st.warning("⚠️ Archivo 'pfd_proceso.png' no encontrado en el repositorio.")
-    st.markdown('</div>', unsafe_allow_html=True)
+
+    # ==========================================
+    # 8. PANEL DE MONITOREO INTERACTIVO EN TIEMPO REAL
+    # ==========================================
+    st.divider()
+    st.subheader("🕹️ Panel de Monitoreo de Equipos (HMI)")
+    st.caption("Pasa el cursor sobre cada equipo para iluminar su pantalla de control y revisar sus variables críticas en vivo.")
+
+    # Fila 1: Equipos de Preparación (Gama Lila/Azul)
+    col_e1, col_e2, col_e3 = st.columns(3)
+    
+    with col_e1:
+        st.markdown(f"""
+            <div class="tarjeta-industrial tarjeta-lila">
+                <h4 class="titulo-tarjeta" style="color: #bd00ff;">Bomba P-110</h4>
+                <p style="margin:0; font-size:14px;"><b>Estado:</b> Operando</p>
+                <p style="margin:0; font-size:14px;"><b>Presión Salida:</b> 4.0 atm</p>
+                <p style="margin:0; font-size:14px;"><b>Flujo Másico:</b> 1000 kg/h</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+    with col_e2:
+        st.markdown(f"""
+            <div class="tarjeta-industrial tarjeta-lila">
+                <h4 class="titulo-tarjeta" style="color: #bd00ff;">Precalentador W-210</h4>
+                <p style="margin:0; font-size:14px;"><b>Eficiencia:</b> 90% (Recuperación)</p>
+                <p style="margin:0; font-size:14px;"><b>T. Entrada Mosto:</b> {t_f} °C</p>
+                <p style="margin:0; font-size:14px;"><b>T. Salida Mosto:</b> 85.0 °C</p>
+            </div>
+            """, unsafe_allow_html=True)
+
+    with col_e3:
+        st.markdown(f"""
+            <div class="tarjeta-industrial tarjeta-lila">
+                <h4 class="titulo-tarjeta" style="color: #bd00ff;">Calentador W-310</h4>
+                <p style="margin:0; font-size:14px;"><b>Servicio:</b> Vapor Saturado</p>
+                <p style="margin:0; font-size:14px;"><b>T. Salida Requerida:</b> {t_out} °C</p>
+                <p style="margin:0; font-size:14px;"><b>Carga Térmica:</b> 14.34 kW</p>
+            </div>
+            """, unsafe_allow_html=True)
+
+    # Fila 2: Equipos de Separación (Gama Verde/Amarillo)
+    col_e4, col_e5 = st.columns(2)
+    
+    with col_e4:
+        st.markdown(f"""
+            <div class="tarjeta-industrial tarjeta-verde">
+                <h4 class="titulo-tarjeta" style="color: #39ff14;">Separador Flash K-410</h4>
+                <p style="margin:0; font-size:14px;"><b>Presión de Operación:</b> {p_v:.2f} atm</p>
+                <p style="margin:0; font-size:14px;"><b>Temperatura Flash:</b> 92.2 °C</p>
+                <p style="margin:0; font-size:14px;"><b>Flujo Destilado (Vapor):</b> {producto.F_mass:.2f} kg/h</p>
+            </div>
+            """, unsafe_allow_html=True)
+
+    with col_e5:
+        st.markdown(f"""
+            <div class="tarjeta-industrial tarjeta-verde">
+                <h4 class="titulo-tarjeta" style="color: #39ff14;">Condensador W-510</h4>
+                <p style="margin:0; font-size:14px;"><b>Servicio:</b> Agua Enfriamiento</p>
+                <p style="margin:0; font-size:14px;"><b>Concentración Etanol:</b> {eth_comp:.1f} %</p>
+                <p style="margin:0; font-size:14px;"><b>Flujo Líquido Final:</b> {producto.F_mass:.2f} kg/h</p>
+            </div>
+            """, unsafe_allow_html=True)
         
 # ==========================================
     # 5. ANÁLISIS DE SENSIBILIDAD (PUNTO 6.2)
