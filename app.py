@@ -124,60 +124,54 @@ try:
 
     # --- DESCARGAS ISO (PUNTOS 11 Y 12) ---
 # ==========================================
-# ==========================================
     # 7. DOCUMENTACIÓN TÉCNICA Y DIAGRAMAS (PUNTOS 11 Y 12)
     # ==========================================
     st.divider()
     
-    # Inyección de CSS avanzado para estirar contenedores y aplicar filtros fluorescentes a las imágenes
+    # CSS Avanzado: Invierte los colores oscuros de la imagen a claros y les da un resplandor neón
     st.markdown("""
         <style>
-        /* Estilos generales para bloques a pantalla completa */
-        .bloque-neon-completo {
-            padding: 25px;
-            border-radius: 15px;
-            background-color: #0e1117;
-            margin-bottom: 40px;
+        /* Estilo general para limpiar el contenedor de las imágenes */
+        .contenedor-diagrama-limpio {
+            padding: 10px;
+            margin-bottom: 50px;
             width: 100%;
+            background-color: transparent; /* Sin fondos raros */
         }
         
-        /* Contenedor 1: Lila y Azul Fluorescente */
-        .neon-lila-azul {
-            border: 3px solid #bd00ff;
-            box-shadow: 0 0 20px #00d4ff;
+        /* DIAGRAMA 1: Efecto Lila / Azul Fluorescente sobre el contenido */
+        .efecto-lila-azul img {
+            filter: invert(1) sepia(1) saturate(10) hue-rotate(240deg) drop-shadow(0 0 15px #00d4ff);
+            background-color: #0e1117 !important; /* Mantiene fondo oscuro interno para contraste */
+            border-radius: 10px;
+            padding: 10px;
         }
-        .neon-lila-azul img {
-            filter: drop-shadow(0 0 10px #00d4ff) hue-rotate(50deg) saturate(1.5);
-        }
-        .text-lila {
-            color: #bd00ff !important;
+        .titulo-lila-claro {
+            color: #d680ff !important;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            text-shadow: 0 0 10px #00d4ff;
         }
         
-        /* Contenedor 2: Verde y Amarillo Fluorescente */
-        .neon-verde-amarillo {
-            border: 3px solid #39ff14;
-            box-shadow: 0 0 20px #fff000;
+        /* DIAGRAMA 2: Efecto Verde / Amarillo Fluorescente sobre el contenido */
+        .efecto-verde-amarillo img {
+            filter: invert(1) sepia(1) saturate(12) hue-rotate(70deg) drop-shadow(0 0 15px #39ff14);
+            background-color: #0e1117 !important;
+            border-radius: 10px;
+            padding: 10px;
         }
-        .neon-verde-amarillo img {
-            filter: drop-shadow(0 0 10px #fff000) hue-rotate(280deg) saturate(2);
-        }
-        .text-verde {
+        .titulo-verde-claro {
             color: #39ff14 !important;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            text-shadow: 0 0 10px #fff000;
         }
         </style>
         """, unsafe_allow_html=True)
 
     st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
 
-    # --- 1. DIAGRAMA DE BLOQUES (BFD) - PANTALLA COMPLETA (Lila y Azul) ---
-    st.markdown('<div class="bloque-neon-completo neon-lila-azul">', unsafe_allow_html=True)
-    st.markdown('<h3 class="text-lila">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
+    # --- 1. DIAGRAMA DE BLOQUES (BFD) - Contenido Lila/Azul ---
+    st.markdown('<div class="contenedor-diagrama-limpio efecto-lila-azul">', unsafe_allow_html=True)
+    st.markdown('<h3 class="titulo-lila-claro">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
     
     if os.path.exists("bfd_bloques.png"):
         st.image("bfd_bloques.png", use_container_width=True, caption="Estructura general del proceso de concentración")
@@ -190,9 +184,9 @@ try:
     st.markdown('</div>', unsafe_allow_html=True)
 
 
-    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD) - PANTALLA COMPLETA (Verde y Amarillo) ---
-    st.markdown('<div class="bloque-neon-completo neon-verde-amarillo">', unsafe_allow_html=True)
-    st.markdown('<h3 class="text-verde">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
+    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD) - Contenido Verde/Amarillo ---
+    st.markdown('<div class="contenedor-diagrama-limpio efecto-verde-amarillo">', unsafe_allow_html=True)
+    st.markdown('<h3 class="titulo-verde-claro">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
     
     if os.path.exists("pfd_proceso.png"):
         st.image("pfd_proceso.png", use_container_width=True, caption="Diseño detallado de ingeniería realizado en Lucidchart")
@@ -203,7 +197,6 @@ try:
     else:
         st.warning("⚠️ Archivo 'pfd_proceso.png' no encontrado en el repositorio.")
     st.markdown('</div>', unsafe_allow_html=True)
-    
         
 # ==========================================
     # 5. ANÁLISIS DE SENSIBILIDAD (PUNTO 6.2)
