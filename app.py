@@ -128,38 +128,41 @@ try:
     # ==========================================
     st.divider()
     
-    # CSS Avanzado: Invierte los colores oscuros de la imagen a claros y les da un resplandor neón
+    # CSS Avanzado: Efecto interactivo "Hover" para iluminar los diagramas al pasar el cursor
     st.markdown("""
         <style>
-        /* Estilo general para limpiar el contenedor de las imágenes */
-        .contenedor-diagrama-limpio {
+        /* Contenedor general transparente para evitar bloques toscos */
+        .bloque-diagrama-interactivo {
             padding: 10px;
-            margin-bottom: 50px;
+            margin-bottom: 45px;
             width: 100%;
-            background-color: transparent; /* Sin fondos raros */
+            background-color: transparent;
         }
-        
-        /* DIAGRAMA 1: Efecto Lila / Azul Fluorescente sobre el contenido */
-        .efecto-lila-azul img {
-            filter: invert(1) sepia(1) saturate(10) hue-rotate(240deg) drop-shadow(0 0 15px #00d4ff);
-            background-color: #0e1117 !important; /* Mantiene fondo oscuro interno para contraste */
-            border-radius: 10px;
-            padding: 10px;
+
+        /* --- EFECTO INTERACTIVO HOVER --- */
+        /* Configuración base de las imágenes: transición suave */
+        .bloque-diagrama-interactivo img {
+            transition: all 0.4s ease-in-out !important;
+            border-radius: 12px;
         }
-        .titulo-lila-claro {
-            color: #d680ff !important;
+
+        /* 1. Comportamiento al pasar el cursor en el BFD (Lila/Azul) */
+        .bloque-diagrama-interactivo.lila-azul img:hover {
+            filter: brightness(1.2) drop-shadow(0 0 25px #00d4ff) !important;
+            cursor: pointer;
+        }
+        .text-lila-neon {
+            color: #bd00ff !important;
             font-family: 'Courier New', monospace;
             font-weight: bold;
         }
-        
-        /* DIAGRAMA 2: Efecto Verde / Amarillo Fluorescente sobre el contenido */
-        .efecto-verde-amarillo img {
-            filter: invert(1) sepia(1) saturate(12) hue-rotate(70deg) drop-shadow(0 0 15px #39ff14);
-            background-color: #0e1117 !important;
-            border-radius: 10px;
-            padding: 10px;
+
+        /* 2. Comportamiento al pasar el cursor en el PFD (Verde/Amarillo) */
+        .bloque-diagrama-interactivo.verde-amarillo img:hover {
+            filter: brightness(1.2) drop-shadow(0 0 25px #39ff14) !important;
+            cursor: pointer;
         }
-        .titulo-verde-claro {
+        .text-verde-neon {
             color: #39ff14 !important;
             font-family: 'Courier New', monospace;
             font-weight: bold;
@@ -169,9 +172,9 @@ try:
 
     st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
 
-    # --- 1. DIAGRAMA DE BLOQUES (BFD) - Contenido Lila/Azul ---
-    st.markdown('<div class="contenedor-diagrama-limpio efecto-lila-azul">', unsafe_allow_html=True)
-    st.markdown('<h3 class="titulo-lila-claro">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
+    # --- 1. DIAGRAMA DE BLOQUES (BFD) ---
+    st.markdown('<div class="bloque-diagrama-interactivo lila-azul">', unsafe_allow_html=True)
+    st.markdown('<h3 class="text-lila-neon">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
     
     if os.path.exists("bfd_bloques.png"):
         st.image("bfd_bloques.png", use_container_width=True, caption="Estructura general del proceso de concentración")
@@ -184,9 +187,9 @@ try:
     st.markdown('</div>', unsafe_allow_html=True)
 
 
-    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD) - Contenido Verde/Amarillo ---
-    st.markdown('<div class="contenedor-diagrama-limpio efecto-verde-amarillo">', unsafe_allow_html=True)
-    st.markdown('<h3 class="titulo-verde-claro">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
+    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD) ---
+    st.markdown('<div class="bloque-diagrama-interactivo verde-amarillo">', unsafe_allow_html=True)
+    st.markdown('<h3 class="text-verde-neon">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
     
     if os.path.exists("pfd_proceso.png"):
         st.image("pfd_proceso.png", use_container_width=True, caption="Diseño detallado de ingeniería realizado en Lucidchart")
