@@ -123,30 +123,85 @@ try:
         st.dataframe(pd.DataFrame(e_data), use_container_width=True)
 
     # --- DESCARGAS ISO (PUNTOS 11 Y 12) ---
+# ==========================================
+    # 7. DOCUMENTACIÓN TÉCNICA Y DIAGRAMAS (PUNTOS 11 Y 12)
+    # ==========================================
     st.divider()
-    st.subheader("📂 Documentación Técnica (Estándares ISO)")
-    d1, d2 = st.columns(2)
+    
+    # Inyección de CSS personalizado para los marcos fluorescentes
+    st.markdown("""
+        <style>
+        /* Contenedor 1: Lila y Azul Fluorescente */
+        .maro-lila-azul {
+            border: 3px solid #bd00ff;
+            box-shadow: 0 0 15px #00d4ff, inset 0 0 10px #bd00ff;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #0e1117;
+            margin-bottom: 25px;
+        }
+        .titulo-lila {
+            color: #bd00ff !important;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-shadow: 0 0 8px #00d4ff;
+        }
+        
+        /* Contenedor 2: Verde y Amarillo Fluorescente */
+        .marco-verde-amarillo {
+            border: 3px solid #39ff14;
+            box-shadow: 0 0 15px #fff000, inset 0 0 10px #39ff14;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #0e1117;
+            margin-bottom: 25px;
+        }
+        .titulo-verde {
+            color: #39ff14 !important;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-shadow: 0 0 8px #fff000;
+        }
+        </style>
+        """, unsafe_allow_html=True)
 
-    def leer_pdf(path):
-        if os.path.exists(path):
-            with open(path, "rb") as f:
-                return f.read()
-        return None
+    st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
+    col_diag1, col_diag2 = st.columns(2)
 
-    data_bloques = leer_pdf("Bloques_ISO.pdf")
-    data_pfd = leer_pdf("PFD_ISO.pdf")
-
-    with d1:
-        if data_bloques:
-            st.download_button("⬇️ Descargar Diagrama de Bloques (PDF)", data=data_bloques, file_name="Bloques_ISO.pdf", mime="application/pdf")
+    # --- COLUMNA 1: DIAGRAMA DE BLOQUES (Lila y Azul) ---
+    with col_diag1:
+        st.markdown('<div class="maro-lila-azul">', unsafe_allow_html=True)
+        st.markdown('<h3 class="titulo-lila">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
+        
+        # Mostrar la imagen en la app
+        if os.path.exists("bfd_bloques.png"):
+            st.image("bfd_bloques.png", use_container_width=True, caption="Estructura general del proceso de concentración")
+            
+            # Botón de descarga en formato PDF si existe el archivo original
+            if os.path.exists("Bloques_ISO.pdf"):
+                with open("Bloques_ISO.pdf", "rb") as f:
+                    st.download_button("⬇️ Descargar BFD en PDF", data=f.read(), file_name="Bloques_ISO.pdf", mime="application/pdf")
         else:
-            st.warning("⚠️ Sube 'Bloques_ISO.pdf' a GitHub")
+            st.warning("⚠️ Archivo 'bfd_bloques.png' no encontrado en el repositorio.")
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    with d2:
-        if data_pfd:
-            st.download_button("⬇️ Descargar Diagrama de Flujo (PDF)", data=data_pfd, file_name="PFD_ISO.pdf", mime="application/pdf")
+    # --- COLUMNA 2: DIAGRAMA DE FLUJO DE PROCESO (Verde y Amarillo) ---
+    with col_diag2:
+        st.markdown('<div class="marco-verde-amarillo">', unsafe_allow_html=True)
+        st.markdown('<h3 class="titulo-verde">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
+        
+        # Mostrar la imagen en la app
+        if os.path.exists("pfd_proceso.png"):
+            st.image("pfd_proceso.png", use_container_width=True, caption="Diseño detallado de ingeniería realizado en Lucidchart")
+            
+            # Botón de descarga en formato PDF si existe el archivo original
+            if os.path.exists("PFD_ISO.pdf"):
+                with open("PFD_ISO.pdf", "rb") as f:
+                    st.download_button("⬇️ Descargar PFD en PDF", data=f.read(), file_name="PFD_ISO.pdf", mime="application/pdf")
         else:
-            st.warning("⚠️ Sube 'PFD_ISO.pdf' a GitHub")
+            st.warning("⚠️ Archivo 'pfd_proceso.png' no encontrado en el repositorio.")
+        st.markdown('</div>', unsafe_allow_html=True)
+        
 # ==========================================
     # 5. ANÁLISIS DE SENSIBILIDAD (PUNTO 6.2)
     # ==========================================
