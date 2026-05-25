@@ -316,3 +316,62 @@ try:
 
 except Exception as e:
     st.error(f"Error en la simulación: {e}")
+
+# ==========================================
+    # 7. DOCUMENTACIÓN TÉCNICA Y DIAGRAMAS (SVG INTERACTIVOS)
+    # ==========================================
+    st.divider()
+    
+    # CSS para interactuar directamente con las líneas del dibujo SVG
+    st.markdown("""
+        <style>
+        /* Contenedor limpio sin fondos */
+        .contenedor-svg-interactivo {
+            width: 100%;
+            margin-bottom: 40px;
+            background: transparent;
+        }
+
+        /* --- INTERACCIÓN LILA/AZUL (BFD) --- */
+        /* Al pasar el cursor sobre el SVG, alteramos los vectores internos */
+        .vector-lila img {
+            transition: filter 0.3s ease-in-out;
+        }
+        .vector-lila img:hover {
+            filter: brightness(1.4) drop-shadow(0 0 12px #bd00ff);
+            cursor: pointer;
+        }
+
+        /* --- INTERACCIÓN VERDE/AMARILLO (PFD) --- */
+        .vector-verde img {
+            transition: filter 0.3s ease-in-out;
+        }
+        .vector-verde img:hover {
+            filter: brightness(1.4) drop-shadow(0 0 12px #39ff14);
+            cursor: pointer;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+    st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
+
+    # --- 1. DIAGRAMA DE BLOQUES (BFD en SVG) ---
+    st.markdown('<div class="contenedor-svg-interactivo vector-lila">', unsafe_allow_html=True)
+    st.markdown('<h3 style="color: #d680ff; font-family: monospace;">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
+    
+    if os.path.exists("bfd_bloques.svg"):
+        st.image("bfd_bloques.svg", use_container_width=True)
+    else:
+        st.warning("⚠️ Sube el archivo 'bfd_bloques.svg' para activar la interactividad vectorizada.")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD en SVG) ---
+    st.markdown('<div class="contenedor-svg-interactivo vector-verde">', unsafe_allow_html=True)
+    st.markdown('<h3 style="color: #39ff14; font-family: monospace;">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
+    
+    if os.path.exists("pfd_proceso.svg"):
+        st.image("pfd_proceso.svg", use_container_width=True)
+    else:
+        st.warning("⚠️ Sube el archivo 'pfd_proceso.svg' para activar la interactividad vectorizada.")
+    st.markdown('</div>', unsafe_allow_html=True)
