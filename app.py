@@ -83,12 +83,12 @@ with st.sidebar:
 # ==========================================
 # 4. DASHBOARD PRINCIPAL (PUNTO 10)
 # ==========================================
-st.title("🎓 Sistema Integral de Concentración de Mosto")
+st.title("Sistema Integral de Concentración de Mosto")
 
 try:
     sistema, producto = run_simulation(t_f, t_out, p_v, p_luz, p_vap, p_agu, p_mos, p_eta)
 
-    st.subheader("📌 Datos del Producto Final")
+    st.subheader("Datos del Producto Final")
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Presión", f"{producto.P/101325:.2f} atm")
     k2.metric("Temperatura", f"{producto.T-273.15:.1f} °C")
