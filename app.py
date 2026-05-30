@@ -265,28 +265,51 @@ try:
                 e_data.append({"Equipo": u.ID, "Carga (kW)": round(q_kw, 2)})
         st.dataframe(pd.DataFrame(e_data), use_container_width=True)
 
-    # --- 7. DOCUMENTACIÓN TÉCNICA E INYECCIÓN DE SVG INTERACTIVOS ---
+# --- 7. DOCUMENTACIÓN TÉCNICA (DIAGRAMAS SVG OPTIMIZADOS Y ESCALADOS) ---
     st.divider()
     st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
+    st.caption("Pasa el cursor sobre los diagramas para resaltar su área operativa.")
 
-    # --- 1. DIAGRAMA DE BLOQUES (BFD en SVG) ---
+    # CSS corregido: Controla el tamaño (máximo 80% del ancho) y evita textos encimados o manchas
+    st.markdown("""
+        <style>
+        /* Contenedor que limita el tamaño gigante y centra los diagramas */
+        .wrapper-diagrama {
+            max-width: 85%;
+            margin: 0 auto 40px auto;
+            padding: 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Efecto Hover elegante: Resplandor neón perimetral sin romper el gráfico interno */
+        .borde-lila:hover {
+            box-shadow: 0 0 25px rgba(189, 0, 255, 0.4);
+            background-color: rgba(189, 0, 255, 0.02);
+            cursor: pointer;
+        }
+        .borde-verde:hover {
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.4);
+            background-color: rgba(57, 255, 20, 0.02);
+            cursor: pointer;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+
+    # --- 1. DIAGRAMA DE BLOQUES (BFD) ---
     if os.path.exists("bfd_bloques.svg"):
-        with open("bfd_bloques.svg", "r", encoding="utf-8") as f:
-            svg_bloques = f.read()
-        st.markdown('<div class="contenedor-svg-interactivo vector-lila">', unsafe_allow_html=True)
-        st.markdown('<h3 style="color: #d680ff; font-family: monospace; margin-bottom:12px;">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
-        st.markdown(svg_bloques, unsafe_allow_html=True) # Dibuja e interactúa con el SVG
+        st.markdown('<div class="wrapper-diagrama borde-lila">', unsafe_allow_html=True)
+        st.markdown('<h3 style="color: #d680ff; font-family: monospace; font-size:18px; margin-bottom:10px;">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
+        st.image("bfd_bloques.svg", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.warning("⚠️ Archivo 'bfd_bloques.svg' no detectado. Sube el SVG a tu repositorio.")
 
-    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD en SVG) ---
+    # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD) ---
     if os.path.exists("pfd_proceso.svg"):
-        with open("pfd_proceso.svg", "r", encoding="utf-8") as f:
-            svg_proceso = f.read()
-        st.markdown('<div class="contenedor-svg-interactivo vector-verde">', unsafe_allow_html=True)
-        st.markdown('<h3 style="color: #39ff14; font-family: monospace; margin-bottom:12px;">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
-        st.markdown(svg_proceso, unsafe_allow_html=True) # Dibuja e interactúa con el SVG
+        st.markdown('<div class="wrapper-diagrama borde-verde">', unsafe_allow_html=True)
+        st.markdown('<h3 style="color: #39ff14; font-family: monospace; font-size:18px; margin-bottom:10px;">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
+        st.image("pfd_proceso.svg", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.warning("⚠️ Archivo 'pfd_proceso.svg' no detectado. Sube el SVG a tu repositorio.")
@@ -301,7 +324,7 @@ try:
         if os.path.exists("PFD_ISO.pdf"):
             with open("PFD_ISO.pdf", "rb") as f:
                 st.download_button("⬇️ Descargar PFD en PDF", data=f.read(), file_name="PFD_ISO.pdf", mime="application/pdf")
-
+                
     # --- 8. PANEL DE MONITOREO INTERACTIVO HMI ---
     st.divider()
     st.subheader("🕹️ Panel de Monitoreo de Equipos (HMI)")
