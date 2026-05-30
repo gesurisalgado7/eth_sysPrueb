@@ -265,32 +265,36 @@ try:
                 e_data.append({"Equipo": u.ID, "Carga (kW)": round(q_kw, 2)})
         st.dataframe(pd.DataFrame(e_data), use_container_width=True)
 
-# --- 7. DOCUMENTACIÓN TÉCNICA (DIAGRAMAS SVG OPTIMIZADOS Y ESCALADOS) ---
+# --- 7. DOCUMENTACIÓN TÉCNICA (DIAGRAMAS INTERACTIVOS CORREGIDOS) ---
     st.divider()
     st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
-    st.caption("Pasa el cursor sobre los diagramas para resaltar su área operativa.")
+    st.caption("Supervisa los diagramas pasando el cursor directamente sobre cada diseño para activar el resplandor operativo.")
 
-    # CSS corregido: Controla el tamaño (máximo 80% del ancho) y evita textos encimados o manchas
+    # CSS Limpio: Elimina bloques vacíos fantasmas y aplica el efecto HOVER directo al dibujo SVG
     st.markdown("""
         <style>
-        /* Contenedor que limita el tamaño gigante y centra los diagramas */
-        .wrapper-diagrama {
-            max-width: 85%;
-            margin: 0 auto 40px auto;
-            padding: 15px;
+        /* Ajustes específicos sobre el contenedor nativo de imágenes en Streamlit */
+        [data-testid="stImage"] {
+            transition: all 0.3s ease-in-out !important;
             border-radius: 12px;
-            transition: all 0.3s ease-in-out;
+            padding: 10px;
+            max-width: 85% !important;
+            margin: 0 auto 30px auto !important;
         }
-        
-        /* Efecto Hover elegante: Resplandor neón perimetral sin romper el gráfico interno */
-        .borde-lila:hover {
-            box-shadow: 0 0 25px rgba(189, 0, 255, 0.4);
-            background-color: rgba(189, 0, 255, 0.02);
+
+        /* Hover dinámico directo para el BFD: Ilumina el dibujo al pasar el cursor */
+        .bfd-neon-hover [data-testid="stImage"]:hover {
+            box-shadow: 0 0 25px rgba(189, 0, 255, 0.5) !important;
+            background-color: rgba(189, 0, 255, 0.03) !important;
+            transform: scale(1.005);
             cursor: pointer;
         }
-        .borde-verde:hover {
-            box-shadow: 0 0 25px rgba(57, 255, 20, 0.4);
-            background-color: rgba(57, 255, 20, 0.02);
+
+        /* Hover dinámico directo para el PFD: Ilumina el dibujo al pasar el cursor */
+        .pfd-neon-hover [data-testid="stImage"]:hover {
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.5) !important;
+            background-color: rgba(57, 255, 20, 0.03) !important;
+            transform: scale(1.005);
             cursor: pointer;
         }
         </style>
@@ -298,7 +302,8 @@ try:
 
     # --- 1. DIAGRAMA DE BLOQUES (BFD) ---
     if os.path.exists("bfd_bloques.svg"):
-        st.markdown('<div class="wrapper-diagrama borde-lila">', unsafe_allow_html=True)
+        # Contenedor Markdown que abraza directamente al elemento st.image de abajo
+        st.markdown('<div class="bfd-neon-hover">', unsafe_allow_html=True)
         st.markdown('<h3 style="color: #d680ff; font-family: monospace; font-size:18px; margin-bottom:10px;">📊 Diagrama de Bloques (BFD)</h3>', unsafe_allow_html=True)
         st.image("bfd_bloques.svg", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
@@ -307,7 +312,8 @@ try:
 
     # --- 2. DIAGRAMA DE FLUJO DE PROCESO (PFD) ---
     if os.path.exists("pfd_proceso.svg"):
-        st.markdown('<div class="wrapper-diagrama borde-verde">', unsafe_allow_html=True)
+        # Contenedor Markdown que abraza directamente al elemento st.image de abajo
+        st.markdown('<div class="pfd-neon-hover">', unsafe_allow_html=True)
         st.markdown('<h3 style="color: #39ff14; font-family: monospace; font-size:18px; margin-bottom:10px;">⚙️ Diagrama de Flujo de Proceso (PFD)</h3>', unsafe_allow_html=True)
         st.image("pfd_proceso.svg", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
