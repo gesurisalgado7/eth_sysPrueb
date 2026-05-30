@@ -268,7 +268,7 @@ try:
 # --- 7. DOCUMENTACIÓN TÉCNICA (DIAGRAMAS INTERACTIVOS CORREGIDOS) ---
     st.divider()
     st.subheader("📂 Documentación Técnica Oficial (Estándares ISO)")
-    st.caption("Supervisa los diagramas pasando el cursor directamente sobre cada diseño para activar el resplandor operativo.")
+    #st.caption("Supervisa los diagramas pasando el cursor directamente sobre cada diseño para activar el resplandor operativo.")
 
     # CSS Limpio: Elimina bloques vacíos fantasmas y aplica el efecto HOVER directo al dibujo SVG
     st.markdown("""
